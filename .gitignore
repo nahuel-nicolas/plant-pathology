@@ -1,4 +1,6 @@
 plant-pathology-2020-fgvc7/
 .claude
 data/
-venv/
+venv*
+.python-version
+*.pth
