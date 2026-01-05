@@ -4,3 +4,9 @@ ipykernel
 Pillow
 imagehash
 matplotlib
+torch
+torchvision
+numpy
+scikit-learn
+tqdm
+seaborn
