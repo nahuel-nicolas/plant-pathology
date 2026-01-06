@@ -14,3 +14,4 @@ torchinfo
 scikit-learn
 tqdm
 seaborn
+tensorboard

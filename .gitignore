@@ -4,3 +4,4 @@ data/
 venv*
 .python-version
 *.pth
+runs/
