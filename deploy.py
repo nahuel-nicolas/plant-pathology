@@ -167,7 +167,7 @@ print(f"Confidence: {probabilities[predicted_class]:.2%}")
 - **Data Augmentation**:
   - Random horizontal flip
   - Random vertical flip
-  - Random rotation (±20°)
+  - Random rotation (+/- 20 degrees)
   - Color jitter (brightness=0.2, contrast=0.2)
 
 ### Hardware
@@ -232,7 +232,7 @@ def convert_and_upload(model_path="best_model.pth", repo_id="nahuelnb/plant-path
     print("\n6. Creating README.md (model card)...")
     readme = create_readme()
     readme_path = output_dir / "README.md"
-    with open(readme_path, 'w') as f:
+    with open(readme_path, 'w', encoding='utf-8') as f:
         f.write(readme)
     print(f"   - Saved to: {readme_path}")
 
@@ -247,12 +247,23 @@ def convert_and_upload(model_path="best_model.pth", repo_id="nahuelnb/plant-path
         create_repo(repo_id, exist_ok=True, private=False)
 
         print(f"   - Uploading files...")
-        api.upload_folder(
-            folder_path=output_dir,
-            repo_id=repo_id,
-            repo_type="model"
-        )
-        print(f"SUCCESS! Model deployed to: https://huggingface.co/{repo_id}")
+        # Upload each file individually to handle binary files correctly
+        files_to_upload = [
+            (safetensors_path, "plant-pathology-efficientnetb2.safetensors"),
+            (config_path, "config.json"),
+            (readme_path, "README.md")
+        ]
+
+        for local_path, path_in_repo in files_to_upload:
+            print(f"     • Uploading {path_in_repo}...")
+            api.upload_file(
+                path_or_fileobj=str(local_path),
+                path_in_repo=path_in_repo,
+                repo_id=repo_id,
+                repo_type="model"
+            )
+
+        print(f"\nSUCCESS! Model deployed to: https://huggingface.co/{repo_id}")
 
     except Exception as e:
         print(f"\n   ERROR: Failed to upload to Hugging Face")
