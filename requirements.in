@@ -12,3 +12,5 @@ scikit-learn
 tqdm
 seaborn
 tensorboard
+huggingface_hub
+safetensors
